@@ -70,6 +70,7 @@ module.exports = {
       'capIsNew': false
     }],
     'new-parens': 2,
+    'no-irregular-whitespace': 'off',
     'no-array-constructor': 2,
     'no-caller': 2,
     'no-console': 'off',

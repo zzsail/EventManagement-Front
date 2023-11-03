@@ -13,8 +13,8 @@ import store from './store'
 import router from './router'
 
 import '@/icons' // icon
+import '@/assets/iconfont/iconfont.css'
 import '@/permission' // permission control
-
 /**
  * If you don't want to use mock-server
  * you want to use MockJs for mock api

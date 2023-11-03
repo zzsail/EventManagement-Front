@@ -1,73 +1,92 @@
 <template>
+
   <div class="login-container">
-    <el-form ref="loginForm" :model="loginForm" :rules="loginRules" class="login-form" auto-complete="on" label-position="left">
+    <el-container class="login-inline">
+      <el-aside class="login-aside" width="500px"></el-aside>
+      <el-container>
+        <el-header class="login-header" height="100px">
+          <div style="float: right; margin-top: 5px;">还没有账户？去注册</div>
+        </el-header>
+        <el-main class="login-main">
+          <el-form ref="loginForm" :model="loginForm" :rules="loginRules" class="login-form" auto-complete="on" label-position="left">
+            <div class="title-container">
+              <h3 class="title">登录到您的账户</h3>
+            </div>
 
-      <div class="title-container">
-        <h3 class="title">Login Form</h3>
-      </div>
+            <el-form-item prop="username">
+              <span class="svg-container">
+                <svg-icon icon-class="user" />
+              </span>
+              <el-input
+                ref="username"
+                v-model="loginForm.username"
+                placeholder="请输入用户名"
+                name="username"
+                type="text"
+                tabindex="1"
+                auto-complete="on"
+              />
+            </el-form-item>
 
-      <el-form-item prop="username">
-        <span class="svg-container">
-          <svg-icon icon-class="user" />
-        </span>
-        <el-input
-          ref="username"
-          v-model="loginForm.username"
-          placeholder="Username"
-          name="username"
-          type="text"
-          tabindex="1"
-          auto-complete="on"
-        />
-      </el-form-item>
+            <el-form-item prop="password">
+              <span class="svg-container">
+                <svg-icon icon-class="password" />
+              </span>
+              <el-input
+                :key="passwordType"
+                ref="password"
+                v-model="loginForm.password"
+                :type="passwordType"
+                placeholder="请输入登录密码"
+                name="password"
+                tabindex="2"
+                auto-complete="on"
+                @keyup.enter.native="handleLogin"
+              />
+              <span class="show-pwd" @click="showPwd">
+                <svg-icon :icon-class="passwordType === 'password' ? 'eye' : 'eye-open'" />
+              </span>
+            </el-form-item>
 
-      <el-form-item prop="password">
-        <span class="svg-container">
-          <svg-icon icon-class="password" />
-        </span>
-        <el-input
-          :key="passwordType"
-          ref="password"
-          v-model="loginForm.password"
-          :type="passwordType"
-          placeholder="Password"
-          name="password"
-          tabindex="2"
-          auto-complete="on"
-          @keyup.enter.native="handleLogin"
-        />
-        <span class="show-pwd" @click="showPwd">
-          <svg-icon :icon-class="passwordType === 'password' ? 'eye' : 'eye-open'" />
-        </span>
-      </el-form-item>
+            <el-button :loading="loading" type="primary" style="width:100%;margin-bottom:30px;" @click.native.prevent="handleLogin">登录</el-button>
 
-      <el-button :loading="loading" type="primary" style="width:100%;margin-bottom:30px;" @click.native.prevent="handleLogin">Login</el-button>
-
-      <div class="tips">
-        <span style="margin-right:20px;">username: admin</span>
-        <span> password: any</span>
-      </div>
-
-    </el-form>
+            <div class="tips">
+              <span style="margin-right:20px;">username: admin</span>
+              <span> password: any</span>
+            </div>
+          </el-form>
+        </el-main>
+      </el-container>
+    </el-container>
+    <!-- <el-row class="login-inline">
+      <el-col :span="8" class="login-left">
+        <div class="login-image">1</div>
+      </el-col>
+      <el-col :span="16" class="login-right">
+      </el-col>
+    </el-row> -->
   </div>
+
 </template>
 
 <script>
-import { validUsername } from '@/utils/validate'
-
 export default {
   name: 'Login',
   data() {
     const validateUsername = (rule, value, callback) => {
-      if (!validUsername(value)) {
-        callback(new Error('Please enter the correct user name'))
+      if (!value) {
+        callback(new Error('请输入用户名'))
+      } else if (value.length < 3) {
+        callback(new Error('用户名长度至少为3位'))
       } else {
         callback()
       }
     }
     const validatePassword = (rule, value, callback) => {
-      if (value.length < 6) {
-        callback(new Error('The password can not be less than 6 digits'))
+      if (!value) {
+        callback(new Error('密码不能为空'))
+      } else if (value.length < 6) {
+        callback(new Error('密码长度至少为6位'))
       } else {
         callback()
       }
@@ -131,7 +150,8 @@ export default {
 
 $bg:#283443;
 $light_gray:#fff;
-$cursor: #fff;
+$dark_gray:#000000;
+$cursor: #000000;
 
 @supports (-webkit-mask: none) and (not (cater-color: $cursor)) {
   .login-container .el-input input {
@@ -152,7 +172,7 @@ $cursor: #fff;
       -webkit-appearance: none;
       border-radius: 0px;
       padding: 12px 5px 12px 15px;
-      color: $light_gray;
+      color: $dark_gray;
       height: 47px;
       caret-color: $cursor;
 
@@ -165,32 +185,27 @@ $cursor: #fff;
 
   .el-form-item {
     border: 1px solid rgba(255, 255, 255, 0.1);
-    background: rgba(0, 0, 0, 0.1);
-    border-radius: 5px;
+    background: #efefef;
+    border-radius: 6px;
     color: #454545;
   }
 }
 </style>
 
 <style lang="scss" scoped>
-$bg:#2d3a4b;
-$dark_gray:#889aa4;
+$bg:#8c8c8c;
+$loginBg:#ffffff;
+$dark_gray:#000000;
 $light_gray:#eee;
 
 .login-container {
   min-height: 100%;
   width: 100%;
-  background-color: $bg;
+  height: 100%;
+  // background-color: $bg;
+  background-image: url(../../assets/login/loginBg.png);
+  background-size: cover;
   overflow: hidden;
-
-  .login-form {
-    position: relative;
-    width: 520px;
-    max-width: 100%;
-    padding: 160px 35px 0;
-    margin: 0 auto;
-    overflow: hidden;
-  }
 
   .tips {
     font-size: 14px;
@@ -211,15 +226,17 @@ $light_gray:#eee;
     width: 30px;
     display: inline-block;
   }
-
+  .login-input {
+    width: 100px;
+  }
   .title-container {
     position: relative;
 
     .title {
       font-size: 26px;
-      color: $light_gray;
+      color: $dark_gray;
       margin: 0px auto 40px auto;
-      text-align: center;
+      text-align: left;
       font-weight: bold;
     }
   }
@@ -233,5 +250,28 @@ $light_gray:#eee;
     cursor: pointer;
     user-select: none;
   }
+}
+.login-inline {
+  width: 80%;
+  height: 80%;
+  margin: auto;
+  position: absolute;
+  top: 0; left: 0; bottom: 0; right: 0;
+  box-shadow: rgba(0, 0, 0, 0.25) 0px 54px 55px, rgba(0, 0, 0, 0.12) 0px -12px 30px, rgba(0, 0, 0, 0.12) 0px 4px 6px, rgba(0, 0, 0, 0.17) 0px 12px 13px, rgba(0, 0, 0, 0.09) 0px -3px 5px;
+  .login-aside {
+    background-image: url('../../assets/login/inlineBg.jpg');
+  }
+  .login-header {
+    background-color: $loginBg;
+  }
+  .login-main {
+    background-color: $loginBg;
+  }
+}
+
+.login-form {
+  width: 400px;
+  max-width: 65%;
+  margin: auto;
 }
 </style>

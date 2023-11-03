@@ -17,15 +17,25 @@ export default {
     const vnodes = []
 
     if (icon) {
+      // if (icon.includes('el-icon')) {
+      //   vnodes.push(<i class={[icon, 'sub-el-icon']} />)
+      // } else {
+      //   vnodes.push(<svg-icon icon-class={icon}/>)
+      // }
       if (icon.includes('el-icon')) {
-        vnodes.push(<i class={[icon, 'sub-el-icon']} />)
+        vnodes.push(
+          <i class={['sub-el-icon', 'icon-container', icon]} />
+        )
       } else {
-        vnodes.push(<svg-icon icon-class={icon}/>)
+        // Assuming you have a CSS class for your custom icons
+        vnodes.push(
+          <svg-icon icon-class={icon} class='icon-container' />
+        )
       }
     }
 
     if (title) {
-      vnodes.push(<span slot='title'>{(title)}</span>)
+      vnodes.push(<span class='sidebarSpan' slot='title'>{(title)}</span>)
     }
     return vnodes
   }
@@ -38,4 +48,10 @@ export default {
   width: 1em;
   height: 1em;
 }
+.icon-container{
+  font-size: 17px;
+}
+.sidebarSpan{
+    font-size: 17px;
+  }
 </style>

@@ -46,35 +46,52 @@ export const constantRoutes = [
   {
     path: '/',
     component: Layout,
-    redirect: '/dashboard',
+    redirect: '/home',
     children: [{
-      path: 'dashboard',
-      name: 'dashboard',
-      component: () => import('@/views/dashboard/index'),
-      meta: { title: '主页', icon: 'dashboard' }
+      path: 'home',
+      name: 'Home',
+      component: () => import('@/views/home/index'),
+      meta: { title: '主页', icon: 'home' }
     }]
   },
 
   {
-    path: '/example',
+    path: '/event',
     component: Layout,
-    redirect: '/example/table',
-    name: 'Example',
-    meta: { title: 'Example', icon: 'el-icon-s-help' },
+    redirect: '/event/table',
+    name: 'event',
+    meta: {
+      title: '赛事',
+      icon: 'event'
+    },
     children: [
       {
-        path: 'table',
-        name: 'Table',
-        component: () => import('@/views/table/index'),
-        meta: { title: 'Table', icon: 'table' }
+        path: 'info',
+        name: 'Info',
+        component: () => import('@/views/event/info/index'),
+        meta: { title: '赛事信息', icon: 'event-info' }
       },
       {
-        path: 'tree',
-        name: 'Tree',
-        component: () => import('@/views/tree/index'),
-        meta: { title: 'Tree', icon: 'tree' }
+        path: 'tbale',
+        name: 'Table',
+        component: () => import('@/views/event/table/index'),
+        meta: { title: '赛事管理', icon: 'event-menu' }
       }
     ]
+    // children: [
+    //   {
+    //     path: 'table',
+    //     name: 'Table',
+    //     component: () => import('@/views/table/index'),
+    //     meta: { title: 'Table', icon: 'menu' }
+    //   },
+    //   {
+    //     path: 'tree',
+    //     name: 'Tree',
+    //     component: () => import('@/views/tree/index'),
+    //     meta: { title: 'Tree', icon: 'tree' }
+    //   }
+    // ]
   },
 
   {

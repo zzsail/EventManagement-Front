@@ -3,30 +3,26 @@
     <hamburger :is-active="sidebar.opened" class="hamburger-container" @toggleClick="toggleSideBar" />
 
     <breadcrumb class="breadcrumb-container" />
-
-    <div class="right-menu">
-      <el-dropdown class="avatar-container" trigger="click">
-        <div class="avatar-wrapper">
-          <img :src="avatar+'?imageView2/1/w/80/h/80'" class="user-avatar">
-          <i class="el-icon-caret-bottom" />
-        </div>
-        <el-dropdown-menu slot="dropdown" class="user-dropdown">
-          <router-link to="/">
-            <el-dropdown-item>
-              Home
+    <div class="user-welcome">
+      <div class="username-text">{{ name }}</div>
+      <div class="right-menu">
+        <el-dropdown class="avatar-container" trigger="hover">
+          <div class="avatar-wrapper">
+            <img :src="avatar+'?imageView2/1/w/80/h/80'" class="user-avatar">
+            <i class="el-icon-caret-bottom" />
+          </div>
+          <el-dropdown-menu slot="dropdown" class="user-dropdown">
+            <router-link to="/">
+              <el-dropdown-item>
+                主页
+              </el-dropdown-item>
+            </router-link>
+            <el-dropdown-item divided @click.native="logout">
+              <span style="display:block;">登出</span>
             </el-dropdown-item>
-          </router-link>
-          <a target="_blank" href="https://github.com/PanJiaChen/vue-admin-template/">
-            <el-dropdown-item>Github</el-dropdown-item>
-          </a>
-          <a target="_blank" href="https://panjiachen.github.io/vue-element-admin-site/#/">
-            <el-dropdown-item>Docs</el-dropdown-item>
-          </a>
-          <el-dropdown-item divided @click.native="logout">
-            <span style="display:block;">Log Out</span>
-          </el-dropdown-item>
-        </el-dropdown-menu>
-      </el-dropdown>
+          </el-dropdown-menu>
+        </el-dropdown>
+      </div>
     </div>
   </div>
 </template>
@@ -44,7 +40,8 @@ export default {
   computed: {
     ...mapGetters([
       'sidebar',
-      'avatar'
+      'avatar',
+      'name'
     ])
   },
   methods: {
@@ -83,7 +80,16 @@ export default {
   .breadcrumb-container {
     float: left;
   }
-
+  .user-welcome{
+    float: right;
+    height: 100%;
+    width: 220px;
+  }
+  .username-text{
+      float:left;
+      margin-top: 17px;
+      margin-left: 50px;
+  }
   .right-menu {
     float: right;
     height: 100%;
@@ -110,7 +116,6 @@ export default {
         }
       }
     }
-
     .avatar-container {
       margin-right: 30px;
 
