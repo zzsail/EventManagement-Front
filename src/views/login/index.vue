@@ -2,74 +2,145 @@
 
   <div class="login-container">
     <el-container class="login-inline">
-      <el-aside class="login-aside" width="500px"></el-aside>
+      <el-aside class="login-aside" width="500px" />
       <el-container>
         <el-header class="login-header" height="100px">
-          <div style="float: right; margin-top: 5px;">
-            还没有账户？<el-button type="text">去注册</el-button>
-          </div>
+          <transition name="el-fade-in-linear" :duration="{enter:1200,leave:300}">
+            <div v-if="loginFlag" style="float: right; margin-top: 5px;">
+              还没有账户？<el-button ref="registerBtn" type="text" @click="flagSwitch">去注册</el-button>
+            </div>
+            <div v-if="registerFlag" style="float:  left; margin-top: 5px;">
+              <el-button type="text" @click="handleReturn">
+                <svg-icon icon-class="return" class-name="icon-large" />
+              </el-button>
+            </div>
+          </transition>
         </el-header>
         <el-main class="login-main">
-          <el-form ref="loginForm" :v-if="flag" :model="loginForm" :rules="loginRules" class="login-form" auto-complete="on" label-position="left">
-            <div class="title-container">
-              <h3 class="title">登录到您的账户</h3>
-            </div>
+          <transition name="el-fade-in-linear" :duration="{enter:1200,leave:300}">
+            <el-form v-if="loginFlag" ref="loginForm" :model="loginForm" :rules="loginRules" class="form" auto-complete="on" label-position="left">
+              <div class="title-container">
+                <h3 class="title">登录到您的账户</h3>
+              </div>
 
-            <el-form-item prop="username">
-              <span class="svg-container">
-                <svg-icon icon-class="user" />
-              </span>
-              <el-input
-                ref="username"
-                v-model="loginForm.username"
-                placeholder="请输入用户名"
-                name="username"
-                type="text"
-                tabindex="1"
-                auto-complete="on"
-              />
-            </el-form-item>
+              <el-form-item prop="username">
+                <span class="svg-container">
+                  <svg-icon icon-class="user" />
+                </span>
+                <el-input
+                  ref="username"
+                  v-model="loginForm.username"
+                  placeholder="请输入用户名"
+                  name="username"
+                  type="text"
+                  tabindex="1"
+                  auto-complete="on"
+                />
+              </el-form-item>
 
-            <el-form-item prop="password">
-              <span class="svg-container">
-                <svg-icon icon-class="password" />
-              </span>
-              <el-input
-                :key="passwordType"
-                ref="password"
-                v-model="loginForm.password"
-                :type="passwordType"
-                placeholder="请输入登录密码"
-                name="password"
-                tabindex="2"
-                auto-complete="on"
-                @keyup.enter.native="handleLogin"
-              />
-              <span class="show-pwd" @click="showPwd">
-                <svg-icon :icon-class="passwordType === 'password' ? 'eye' : 'eye-open'" />
-              </span>
-            </el-form-item>
+              <el-form-item prop="password">
+                <span class="svg-container">
+                  <svg-icon icon-class="password" />
+                </span>
+                <el-input
+                  :key="passwordType"
+                  ref="password"
+                  v-model="loginForm.password"
+                  :type="passwordType"
+                  placeholder="请输入登录密码"
+                  name="password"
+                  tabindex="2"
+                  auto-complete="on"
+                  @keyup.enter.native="handleLogin"
+                />
+                <span class="show-pwd" @click="showPwd">
+                  <svg-icon :icon-class="passwordType === 'password' ? 'eye' : 'eye-open'" />
+                </span>
+              </el-form-item>
 
-            <el-button :loading="loading" type="primary" style="width:100%;margin-bottom:30px;" @click.native.prevent="handleLogin">登录</el-button>
+              <el-button :loading="loading" type="primary" style="width:100%;margin-bottom:30px;" @click.native.prevent="handleLogin">登录</el-button>
 
-            <div class="tips">
-              <span style="margin-right:20px;">username: admin</span>
-              <span> password: any</span>
-            </div>
-          </el-form>
-          <el-form :model="registerForm">
-            <el-form-item label=""></el-form-item>
-          </el-form>
+              <div class="tips">
+                <span style="margin-right:20px;">username: admin</span>
+                <span> password: any</span>
+              </div>
+            </el-form>
+            <el-form v-if="registerFlag" ref="registerForm" :model="registerForm" :rules="registerRules" class="form">
+              <div class="title-container">
+                <h3 class="title">注册您的新账户</h3>
+              </div>
+              <el-form-item prop="username">
+                <el-input
+                  ref="username"
+                  v-model="registerForm.username"
+                  placeholder="请输入用户名"
+                  name="username"
+                  type="text"
+                  tabindex="1"
+                />
+              </el-form-item>
+              <el-form-item prop="email">
+                <el-input
+                  ref="email"
+                  v-model="registerForm.email"
+                  placeholder="请输入邮箱地址"
+                  name="email"
+                  tabindex="2"
+                />
+              </el-form-item>
+              <el-form-item prop="password">
+                <el-input
+                  :key="passwordType"
+                  ref="password"
+                  v-model="registerForm.password"
+                  :type="passwordType"
+                  placeholder="请输入登录密码"
+                  name="password"
+                  tabindex="3"
+                />
+                <span class="show-pwd" @click="showPwd">
+                  <svg-icon :icon-class="passwordType === 'password' ? 'eye' : 'eye-open'" />
+                </span>
+              </el-form-item>
+              <el-form-item prop="pwdValidate">
+                <el-input
+                  :key="passwordType"
+                  ref="pwdValidate"
+                  v-model="registerForm.pwdValidate"
+                  :type="passwordType"
+                  placeholder="再次输入密码"
+                  name="pwdValidate"
+                  tabindex="4"
+                  @keyup.enter.native="handleNext"
+                />
+              </el-form-item>
+
+              <el-button :loading="loading" type="primary" style="width:100%;margin-bottom:30px;" @click.native.prevent="handleRegister">注册</el-button>
+            </el-form>
+            <el-form v-if="infoFlag" ref="infoForm" :model="infoForm" :inline="true" class="form">
+              <div class="title-container">
+                <h3 class="title">完善您的信息</h3>
+              </div>
+              <el-form-item prop="age">
+                <el-input
+                  v-model="infoForm.age"
+                  placeholder="请输入年龄"
+                  name="age"
+                  tabindex="1"
+                />
+              </el-form-item>
+              <el-form-item>
+                <el-select v-model="infoForm.gender" placeholder="请选择性别">
+                  <el-option v-for="gender in genders" :key="gender" :label="gender" :value="gender" />
+                </el-select>
+              </el-form-item>
+              <el-button plain style="width:91%;  margin-bottom:30px; float: left;" @click="handleSkip">跳过</el-button>
+              <el-button :loading="loading" type="primary" style="width:91%; margin-left: 1px; float: left;" @click="handleOk"> 确定</el-button>
+            </el-form>
+          </transition>
         </el-main>
       </el-container>
     </el-container>
-    <!-- <el-row class="login-inline">
-      <el-col :span="8" class="login-left">
-        <div class="login-image">1</div>
-      </el-col>
-      <el-col :span="16" class="login-right">
-      </el-col>
-    </el-row> -->
   </div>
 
 </template>
@@ -96,7 +167,19 @@ export default {
         callback()
       }
     }
+    const validatePwdValidate = (rule, value, callback) => {
+      if (!value) {
+        callback(new Error('请再次输入密码'))
+      } else if (value.length < 6) {
+        callback(new Error('密码长度至少为6位'))
+      } else if (value !== this.registerForm.password) {
+        callback(new Error('两次密码不一致'))
+      } else {
+        callback()
+      }
+    }
     return {
+      genders: ['不详', '男', '女'],
       loginForm: {
         username: 'admin',
         password: '111111'
@@ -104,12 +187,26 @@ export default {
       registerForm: {
         username: '',
         email: '',
-        password: ''
+        password: '',
+        pwdValidate: ''
+      },
+      infoForm: {
+        age: '',
+        gender: ''
       },
       loginRules: {
         username: [{ required: true, trigger: 'blur', validator: validateUsername }],
         password: [{ required: true, trigger: 'blur', validator: validatePassword }]
       },
+      registerRules: {
+        username: [{ required: true, trigger: 'blur', validator: validateUsername }],
+        email: [{}],
+        password: [{ required: true, trigger: 'blur', validator: validatePassword }],
+        pwdValidate: [{ required: true, trigger: 'blur', validator: validatePwdValidate }]
+      },
+      loginFlag: true,
+      registerFlag: false,
+      infoFlag: false,
       loading: false,
       passwordType: 'password',
       redirect: undefined
@@ -124,6 +221,68 @@ export default {
     }
   },
   methods: {
+    // 跳过
+    handleSkip() {
+      this.infoFlag = !this.infoFlag
+      setTimeout(() => { this.loginFlag = !this.loginFlag }, 350)
+    },
+    // 确定
+    handleOk() {
+      this.$refs.infoForm.validate(valid => {
+        if (valid) {
+          this.loading = true
+          this.$store.dispatch('user/improveInfo', this.infoForm).then(() => {
+            this.loading = false
+          }).catch(() => {
+            this.loading = false
+          })
+        } else {
+          console.log('error!!')
+          return false
+        }
+      })
+      this.infoFlag = !this.infoFlag
+      setTimeout(() => { this.loginFlag = !this.loginFlag }, 350)
+    },
+    // 注册
+    handleRegister() {
+      // this.$refs.registerForm.validate(valid => {
+      //   if (valid) {
+      //     this.loading = true
+      //     this.$store.dispatch('user/register', this.registerForm).then(() => {
+      //       this.loading = false
+      //     }).catch(() => {
+      //       this.loading = false
+      //     })
+      //   } else {
+      //     console.log('error!!')
+      //     return false
+      //   }
+      // })
+      this.registerFlag = !this.registerFlag
+      setTimeout(() => { this.infoFlag = !this.infoFlag }, 350)
+    },
+    // 返回登录页面
+    handleReturn() {
+      if (this.loginFlag) {
+        this.loginFlag = !this.loginFlag
+        setTimeout(() => { this.registerFlag = !this.registerFlag }, 350)
+      } else {
+        this.registerFlag = !this.registerFlag
+        setTimeout(() => { this.loginFlag = !this.loginFlag }, 350)
+      }
+    },
+    // 注册与登录表单的切换
+    flagSwitch() {
+      if (this.loginFlag) {
+        this.loginFlag = !this.loginFlag
+        setTimeout(() => { this.registerFlag = !this.registerFlag }, 350)
+      } else {
+        this.registerFlag = !this.registerFlag
+        setTimeout(() => { this.loginFlag = !this.loginFlag }, 350)
+      }
+      // 点击后取消注册的焦点
+    },
     showPwd() {
       if (this.passwordType === 'password') {
         this.passwordType = ''
@@ -270,6 +429,7 @@ $light_gray:#eee;
   box-shadow: rgba(0, 0, 0, 0.25) 0px 54px 55px, rgba(0, 0, 0, 0.12) 0px -12px 30px, rgba(0, 0, 0, 0.12) 0px 4px 6px, rgba(0, 0, 0, 0.17) 0px 12px 13px, rgba(0, 0, 0, 0.09) 0px -3px 5px;
   .login-aside {
     background-image: url('../../assets/login/inlineBg.jpg');
+    background-size: cover;
   }
   .login-header {
     background-color: $loginBg;
@@ -279,9 +439,14 @@ $light_gray:#eee;
   }
 }
 
-.login-form {
+.form {
   width: 400px;
   max-width: 65%;
   margin: auto;
+}
+
+.icon-large {
+  width: 30px;
+  height: 30px;
 }
 </style>
