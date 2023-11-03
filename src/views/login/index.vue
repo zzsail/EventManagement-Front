@@ -5,10 +5,12 @@
       <el-aside class="login-aside" width="500px"></el-aside>
       <el-container>
         <el-header class="login-header" height="100px">
-          <div style="float: right; margin-top: 5px;">还没有账户？去注册</div>
+          <div style="float: right; margin-top: 5px;">
+            还没有账户？<el-button type="text">去注册</el-button>
+          </div>
         </el-header>
         <el-main class="login-main">
-          <el-form ref="loginForm" :model="loginForm" :rules="loginRules" class="login-form" auto-complete="on" label-position="left">
+          <el-form ref="loginForm" :v-if="flag" :model="loginForm" :rules="loginRules" class="login-form" auto-complete="on" label-position="left">
             <div class="title-container">
               <h3 class="title">登录到您的账户</h3>
             </div>
@@ -55,6 +57,9 @@
               <span> password: any</span>
             </div>
           </el-form>
+          <el-form :model="registerForm">
+            <el-form-item label=""></el-form-item>
+          </el-form>
         </el-main>
       </el-container>
     </el-container>
@@ -95,6 +100,11 @@ export default {
       loginForm: {
         username: 'admin',
         password: '111111'
+      },
+      registerForm: {
+        username: '',
+        email: '',
+        password: ''
       },
       loginRules: {
         username: [{ required: true, trigger: 'blur', validator: validateUsername }],
