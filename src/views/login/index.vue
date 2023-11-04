@@ -191,6 +191,7 @@ export default {
         pwdValidate: ''
       },
       infoForm: {
+        username: '',
         age: '',
         gender: ''
       },
@@ -237,7 +238,7 @@ export default {
             this.loading = false
           })
         } else {
-          console.log('error!!')
+          console.log('信息完善错误!!')
           return false
         }
       })
@@ -246,19 +247,20 @@ export default {
     },
     // 注册
     handleRegister() {
-      // this.$refs.registerForm.validate(valid => {
-      //   if (valid) {
-      //     this.loading = true
-      //     this.$store.dispatch('user/register', this.registerForm).then(() => {
-      //       this.loading = false
-      //     }).catch(() => {
-      //       this.loading = false
-      //     })
-      //   } else {
-      //     console.log('error!!')
-      //     return false
-      //   }
-      // })
+      this.$refs.registerForm.validate(valid => {
+        if (valid) {
+          this.loading = true
+          this.infoForm.username = this.registerForm.username
+          this.$store.dispatch('user/register', this.registerForm).then(() => {
+            this.loading = false
+          }).catch(() => {
+            this.loading = false
+          })
+        } else {
+          console.log('注册错误!!')
+          return false
+        }
+      })
       this.registerFlag = !this.registerFlag
       setTimeout(() => { this.infoFlag = !this.infoFlag }, 350)
     },
