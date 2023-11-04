@@ -59,11 +59,6 @@
               </el-form-item>
 
               <el-button :loading="loading" type="primary" style="width:100%;margin-bottom:30px;" @click.native.prevent="handleLogin">登录</el-button>
-
-              <div class="tips">
-                <span style="margin-right:20px;">username: admin</span>
-                <span> password: any</span>
-              </div>
             </el-form>
             <el-form v-if="registerFlag" ref="registerForm" :model="registerForm" :rules="registerRules" class="form">
               <div class="title-container">
@@ -178,6 +173,31 @@ export default {
         callback()
       }
     }
+    const validateEmail = (rule, value, callback) => {
+      if (!value) {
+        callback(new Error('邮箱不能为空'))
+      } else if (!this.isEmail(value)) {
+        callback(new Error('请输入正确的邮箱格式'))
+      } else {
+        callback()
+      }
+    }
+    const validateAge = (rule, value, callback) => {
+      if (!value) {
+        callback(new Error('年龄不能为空'))
+      } else if (value < 0 || value > 256) {
+        callback(new Error('请输入正确的年龄'))
+      } else {
+        callback()
+      }
+    }
+    const validateGender = (rule, value, callback) => {
+      if (!value) {
+        callback(new Error('请选择性别'))
+      } else {
+        callback()
+      }
+    }
     return {
       genders: ['不详', '男', '女'],
       loginForm: {
@@ -201,9 +221,13 @@ export default {
       },
       registerRules: {
         username: [{ required: true, trigger: 'blur', validator: validateUsername }],
-        email: [{}],
+        email: [{ required: true, trigger: 'blur', validator: validateEmail }],
         password: [{ required: true, trigger: 'blur', validator: validatePassword }],
         pwdValidate: [{ required: true, trigger: 'blur', validator: validatePwdValidate }]
+      },
+      infoRules: {
+        age: [{ required: true, trigger: 'blur', validator: validateAge }],
+        gender: [{ required: true, trigger: 'blur', validator: validateGender }],
       },
       loginFlag: true,
       registerFlag: false,
@@ -222,6 +246,10 @@ export default {
     }
   },
   methods: {
+    // 校验邮箱
+    isEmail(email) {
+      return /^([a-zA-Z0-9_-])+@([a-zA-Z0-9_-])+((.[a-zA-Z0-9_-]{2,3}){1,2})$/.test(email)
+    },
     // 跳过
     handleSkip() {
       this.infoFlag = !this.infoFlag
@@ -256,13 +284,13 @@ export default {
           }).catch(() => {
             this.loading = false
           })
+          this.registerFlag = !this.registerFlag
+          setTimeout(() => { this.infoFlag = !this.infoFlag }, 350)
         } else {
           console.log('注册错误!!')
           return false
         }
       })
-      this.registerFlag = !this.registerFlag
-      setTimeout(() => { this.infoFlag = !this.infoFlag }, 350)
     },
     // 返回登录页面
     handleReturn() {

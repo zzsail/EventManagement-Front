@@ -38,3 +38,11 @@ export function improveInfo(data) {
     data
   })
 }
+// 分页查询
+export function page(pageNum, pageSize, username) {
+  return request({
+    url: 'user/page',
+    method: 'get',
+    params: { pageNum, pageSize, username }
+  })
+}
