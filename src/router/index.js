@@ -59,7 +59,7 @@ export const constantRoutes = [
     path: '/event',
     component: Layout,
     redirect: '/event/table',
-    name: 'event',
+    name: 'Event',
     meta: {
       title: '赛事',
       icon: 'event'
@@ -78,22 +78,31 @@ export const constantRoutes = [
         meta: { title: '赛事管理', icon: 'event-menu' }
       }
     ]
-    // children: [
-    //   {
-    //     path: 'table',
-    //     name: 'Table',
-    //     component: () => import('@/views/table/index'),
-    //     meta: { title: 'Table', icon: 'menu' }
-    //   },
-    //   {
-    //     path: 'tree',
-    //     name: 'Tree',
-    //     component: () => import('@/views/tree/index'),
-    //     meta: { title: 'Tree', icon: 'tree' }
-    //   }
-    // ]
   },
-
+  {
+    path: '/user',
+    component: Layout,
+    redirect: '/user/info',
+    name: 'User',
+    meta: {
+      title: '用户',
+      icon: 'user'
+    },
+    children: [
+      {
+        path: 'info',
+        name: 'Info',
+        component: () => import('@/views/user/user-info'),
+        meta: { title: '用户信息', icon: 'user-info' }
+      },
+      {
+        path: 'participant',
+        name: 'Participant',
+        component: () => import('@/views/user/user-participant'),
+        meta: { title: '参赛者信息', icon: 'user-participant' }
+      }
+    ]
+  },
   {
     path: '/form',
     component: Layout,

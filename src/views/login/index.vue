@@ -7,7 +7,7 @@
         <el-header class="login-header" height="100px">
           <transition name="el-fade-in-linear" :duration="{enter:1200,leave:300}">
             <div v-if="loginFlag" style="float: right; margin-top: 5px;">
-              还没有账户？<el-button ref="registerBtn" type="text" @click="flagSwitch">去注册</el-button>
+              还没有账户？<el-button ref="registerBtn" type="text" @click="handleSwitch">去注册</el-button>
             </div>
             <div v-if="registerFlag" style="float:  left; margin-top: 5px;">
               <el-button type="text" @click="handleReturn">
@@ -18,11 +18,11 @@
         </el-header>
         <el-main class="login-main">
           <transition name="el-fade-in-linear" :duration="{enter:1200,leave:300}">
-            <el-form v-if="loginFlag" ref="loginForm" :model="loginForm" :rules="loginRules" class="form" auto-complete="on" label-position="left">
+            <el-form v-if="loginFlag" ref="loginForm" status-icon :model="loginForm" :rules="loginRules" class="form" auto-complete="on" label-position="left">
               <div class="title-container">
                 <h3 class="title">登录到您的账户</h3>
               </div>
-
+              <el-divider />
               <el-form-item prop="username">
                 <span class="svg-container">
                   <svg-icon icon-class="user" />
@@ -60,10 +60,11 @@
 
               <el-button :loading="loading" type="primary" style="width:100%;margin-bottom:30px;" @click.native.prevent="handleLogin">登录</el-button>
             </el-form>
-            <el-form v-if="registerFlag" ref="registerForm" :model="registerForm" :rules="registerRules" class="form">
+            <el-form v-if="registerFlag" ref="registerForm" status-icon :model="registerForm" :rules="registerRules" class="form">
               <div class="title-container">
                 <h3 class="title">注册您的新账户</h3>
               </div>
+              <el-divider />
               <el-form-item prop="username">
                 <el-input
                   ref="username"
@@ -106,13 +107,16 @@
                   placeholder="再次输入密码"
                   name="pwdValidate"
                   tabindex="4"
-                  @keyup.enter.native="handleNext"
+                  @keyup.enter.native="handleRegister"
                 />
+                <span class="show-pwd" @click="showPwd">
+                  <svg-icon :icon-class="passwordType === 'password' ? 'eye' : 'eye-open'" />
+                </span>
               </el-form-item>
 
               <el-button :loading="loading" type="primary" style="width:100%;margin-bottom:30px;" @click.native.prevent="handleRegister">注册</el-button>
             </el-form>
-            <el-form v-if="infoFlag" ref="infoForm" :model="infoForm" :inline="true" class="form">
+            <el-form v-if="infoFlag" ref="infoForm" status-icon :model="infoForm" :inline="true" :rules="infoRules" class="form">
               <div class="title-container">
                 <h3 class="title">完善您的信息</h3>
               </div>
@@ -124,13 +128,15 @@
                   tabindex="1"
                 />
               </el-form-item>
-              <el-form-item>
+              <el-form-item prop="gender">
                 <el-select v-model="infoForm.gender" placeholder="请选择性别">
-                  <el-option v-for="gender in genders" :key="gender" :label="gender" :value="gender" />
+                  <el-option value="未知" />
+                  <el-option value="男" />
+                  <el-option value="女" />
                 </el-select>
               </el-form-item>
-              <el-button plain style="width:91%;  margin-bottom:30px; float: left;" @click="handleSkip">跳过</el-button>
-              <el-button :loading="loading" type="primary" style="width:91%; margin-left: 1px; float: left;" @click="handleOk"> 确定</el-button>
+              <el-button plain style="width:91%;  margin-bottom:30px; float: left;" @click.native.prevent="handleSkip">跳过</el-button>
+              <el-button :loading="loading" type="primary" style="width:91%; margin-left: 1px; float: left;" @click.native.prevent="handleOk"> 确定</el-button>
             </el-form>
           </transition>
         </el-main>
@@ -149,6 +155,12 @@ export default {
         callback(new Error('请输入用户名'))
       } else if (value.length < 3) {
         callback(new Error('用户名长度至少为3位'))
+      } else if (value.length > 12) {
+        callback(new Error('用户名长度至多为12位'))
+      } else if (!/[^\d]/g.test(value)) {
+        callback(new Error('用户名不能为纯数字'))
+      } else if (!this.isUsername(value)) {
+        callback(new Error('用户名仅可包含中文、字母、数字以及下划线'))
       } else {
         callback()
       }
@@ -192,7 +204,7 @@ export default {
       }
     }
     const validateGender = (rule, value, callback) => {
-      if (!value) {
+      if (value === '') {
         callback(new Error('请选择性别'))
       } else {
         callback()
@@ -201,8 +213,8 @@ export default {
     return {
       genders: ['不详', '男', '女'],
       loginForm: {
-        username: 'admin',
-        password: '111111'
+        username: '吴亦凡',
+        password: '123123'
       },
       registerForm: {
         username: '',
@@ -227,7 +239,7 @@ export default {
       },
       infoRules: {
         age: [{ required: true, trigger: 'blur', validator: validateAge }],
-        gender: [{ required: true, trigger: 'blur', validator: validateGender }],
+        gender: [{ required: true, trigger: 'blur', validator: validateGender }]
       },
       loginFlag: true,
       registerFlag: false,
@@ -246,6 +258,14 @@ export default {
     }
   },
   methods: {
+    // 清空表单
+    resetForm(formName) {
+      this.$refs[formName].resetFields()
+    },
+    // 校验用户名
+    isUsername(username) {
+      return /^[\u4e00-\u9fa5_a-zA-Z0-9]+$/.test(username)
+    },
     // 校验邮箱
     isEmail(email) {
       return /^([a-zA-Z0-9_-])+@([a-zA-Z0-9_-])+((.[a-zA-Z0-9_-]{2,3}){1,2})$/.test(email)
@@ -262,6 +282,9 @@ export default {
           this.loading = true
           this.$store.dispatch('user/improveInfo', this.infoForm).then(() => {
             this.loading = false
+            this.infoFlag = !this.infoFlag
+            setTimeout(() => { this.loginFlag = !this.loginFlag }, 350)
+            this.resetForm('infoForm')
           }).catch(() => {
             this.loading = false
           })
@@ -270,8 +293,6 @@ export default {
           return false
         }
       })
-      this.infoFlag = !this.infoFlag
-      setTimeout(() => { this.loginFlag = !this.loginFlag }, 350)
     },
     // 注册
     handleRegister() {
@@ -280,12 +301,17 @@ export default {
           this.loading = true
           this.infoForm.username = this.registerForm.username
           this.$store.dispatch('user/register', this.registerForm).then(() => {
-            this.loading = false
+            setTimeout(() => { this.loading = false }, 350)
+            this.$message({
+              message: '注册成功',
+              type: 'success'
+            })
+            this.registerFlag = !this.registerFlag
+            setTimeout(() => { this.infoFlag = !this.infoFlag }, 350)
+            this.resetForm('registerForm')
           }).catch(() => {
             this.loading = false
           })
-          this.registerFlag = !this.registerFlag
-          setTimeout(() => { this.infoFlag = !this.infoFlag }, 350)
         } else {
           console.log('注册错误!!')
           return false
@@ -301,9 +327,10 @@ export default {
         this.registerFlag = !this.registerFlag
         setTimeout(() => { this.loginFlag = !this.loginFlag }, 350)
       }
+      this.resetForm('registerForm')
     },
     // 注册与登录表单的切换
-    flagSwitch() {
+    handleSwitch() {
       if (this.loginFlag) {
         this.loginFlag = !this.loginFlag
         setTimeout(() => { this.registerFlag = !this.registerFlag }, 350)
@@ -311,6 +338,8 @@ export default {
         this.registerFlag = !this.registerFlag
         setTimeout(() => { this.loginFlag = !this.loginFlag }, 350)
       }
+      this.resetForm('loginForm')
+
       // 点击后取消注册的焦点
     },
     showPwd() {
@@ -330,6 +359,10 @@ export default {
           this.$store.dispatch('user/login', this.loginForm).then(() => {
             this.$router.push({ path: this.redirect || '/' })
             this.loading = false
+            this.$message({
+              message: '登录成功',
+              type: 'success'
+            })
           }).catch(() => {
             this.loading = false
           })
@@ -430,11 +463,10 @@ $light_gray:#eee;
   }
   .title-container {
     position: relative;
-
+    // border-bottom: $bg solid 1px;
     .title {
       font-size: 26px;
       color: $dark_gray;
-      margin: 0px auto 40px auto;
       text-align: left;
       font-weight: bold;
     }

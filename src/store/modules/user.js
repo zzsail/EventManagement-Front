@@ -1,4 +1,4 @@
-import { login, logout, getInfo, register, improveInfo } from '@/api/user'
+import { login, logout, getInfo, register, improveInfo, page } from '@/api/user'
 import { getToken, setToken, removeToken } from '@/utils/auth'
 import { resetRouter } from '@/router'
 
@@ -90,7 +90,7 @@ const actions = {
     const { username, email, password } = userInfo
     return new Promise((resolve, reject) => {
       register({ username: username.trim(), email: email, password: password }).then(response => {
-        resolve()
+        resolve(response)
       }).catch(error => {
         reject(error)
       })
@@ -102,6 +102,17 @@ const actions = {
     return new Promise((resolve, reject) => {
       improveInfo({ username: username.trim(), age: age, gender: gender }).then(response => {
         resolve()
+      }).catch(error => {
+        reject(error)
+      })
+    })
+  },
+  // 查询用户信息
+  page({ commit }, pageInfo) {
+    const { pageNum, pageSize, username } = pageInfo
+    return new Promise((resolve, reject) => {
+      page(pageNum, pageSize, username).then(response => {
+        resolve(response)
       }).catch(error => {
         reject(error)
       })
