@@ -1,4 +1,5 @@
 import request from '@/utils/request'
+
 // 登录
 export function login(data) {
   return request({
@@ -60,5 +61,21 @@ export function deleteUser(userId) {
     url: 'user/delete',
     method: 'post',
     params: { userId }
+  })
+}
+// 检查用户名
+export function checkUsername(username) {
+  return request({
+    url: 'user/checkUsername',
+    method: 'get',
+    params: { username }
+  })
+}
+// 检查邮箱
+export function checkEmail(email) {
+  return request({
+    url: 'user/checkEmail',
+    method: 'get',
+    params: { email }
   })
 }

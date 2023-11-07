@@ -147,6 +147,7 @@
 </template>
 
 <script>
+import { checkUsername } from '@/api/user'
 export default {
   name: 'Login',
   data() {
@@ -162,7 +163,13 @@ export default {
       } else if (!this.isUsername(value)) {
         callback(new Error('用户名仅可包含中文、字母、数字以及下划线'))
       } else {
-        callback()
+        this.checkUsername(value).then(res => {
+          if (res) {
+            callback(new Error('用户名已存在'))
+          } else {
+            callback()
+          }
+        })
       }
     }
     const validatePassword = (rule, value, callback) => {
@@ -191,7 +198,13 @@ export default {
       } else if (!this.isEmail(value)) {
         callback(new Error('请输入正确的邮箱格式'))
       } else {
-        callback()
+        this.checkEmail(value).then(res => {
+          if (res) {
+            callback(new Error('邮箱已被注册'))
+          } else {
+            callback()
+          }
+        })
       }
     }
     const validateAge = (rule, value, callback) => {
@@ -258,6 +271,33 @@ export default {
     }
   },
   methods: {
+    // 检查邮箱是否存在
+    checkEmail(email) {
+      return new Promise((resolve, reject) => {
+        this.$store.dispatch('user/checkEmail', email)
+          .then(response => {
+            console.log(response)
+            resolve(response)
+          })
+          .catch(error => {
+            console.error(error)
+            reject(error)
+          })
+      })
+    },
+    // 检查用户名是否存在
+    checkUsername(username) {
+      return new Promise((resolve, reject) => {
+        this.$store.dispatch('user/checkUsername', username)
+          .then(response => {
+            resolve(response)
+          })
+          .catch(error => {
+            console.error(error)
+            reject(error)
+          })
+      })
+    },
     // 清空表单
     resetForm(formName) {
       this.$refs[formName].resetFields()
@@ -296,6 +336,7 @@ export default {
     },
     // 注册
     handleRegister() {
+      // 请求后端用户数据
       this.$refs.registerForm.validate(valid => {
         if (valid) {
           this.loading = true

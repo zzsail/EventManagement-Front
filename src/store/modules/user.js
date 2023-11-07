@@ -1,4 +1,4 @@
-import { login, logout, getInfo, register, improveInfo, page, ban, deleteUser } from '@/api/user'
+import { login, logout, getInfo, register, improveInfo, page, ban, deleteUser, checkEmail, checkUsername } from '@/api/user'
 import { getToken, setToken, removeToken } from '@/utils/auth'
 import { resetRouter } from '@/router'
 
@@ -133,6 +133,26 @@ const actions = {
     return new Promise((resolve, reject) => {
       ban(userId).then(() => {
         resolve()
+      }).catch(error => {
+        reject(error)
+      })
+    })
+  },
+  // 检查用户名
+  checkUsername({ commit }, username) {
+    return new Promise((resovle, reject) => {
+      checkUsername(username).then((response) => {
+        resovle(response.data.isUsernameValid)
+      }).catch(error => {
+        reject(error)
+      })
+    })
+  },
+  // 检查邮箱
+  checkEmail({ commit }, email) {
+    return new Promise((resovle, reject) => {
+      checkEmail(email).then((response) => {
+        resovle(response.data.isEmailValid)
       }).catch(error => {
         reject(error)
       })

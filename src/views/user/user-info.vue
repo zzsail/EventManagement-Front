@@ -31,7 +31,7 @@
       <el-table-column label="操作" align="center">
         <template slot-scope="{row,$index}">
           <el-button type="primary" :loading="btnLoading" size="small">编辑</el-button>
-          <el-button v-if="row.ban" :loading="btnLoading" size="small" @click="handleBan(row, '封禁')">封禁</el-button>
+          <el-button v-if="row.ban" :loading="btnLoading" size="small" @click="handleBan(row, '封禁', )">封禁</el-button>
           <el-button v-if="!row.ban" :loading="btnLoading" type="success" size="small" @click="handleBan(row, '解禁')">解禁</el-button>
           <el-button type="danger" :loading="btnLoading" size="small" @click="handleDelete(row, $index)">删除</el-button>
         </template>
@@ -74,19 +74,12 @@ export default {
     },
     // 封解禁用户
     handleBan(row, msg) {
-      this.$confirm('确定' + msg + '该用户？', {
-        confirmButtonText: '确定',
-        cancelButtonText: '取消',
-        type: 'warning'
-      }).then(() => {
+      this.confirmMessageBox('确定' + msg + '该用户？', msg).then(() => {
         this.changeBtnLoading()
         this.$store.dispatch('user/ban', row.userId).then(() => {
           row.ban = !row.ban
           this.changeBtnLoading()
-          this.$message({
-            message: msg + '成功',
-            type: 'success'
-          })
+          this.sideMessageBox(msg + '成功', msg, 'success')
         }).catch(() => {
           this.changeBtnLoading()
         })
