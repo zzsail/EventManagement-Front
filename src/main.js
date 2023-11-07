@@ -13,6 +13,12 @@ import router from './router'
 import '@/icons' // icon
 import '@/assets/iconfont/iconfont.css'
 import '@/permission' // permission control
+
+import { messageBox } from './mixins'
+Vue.mixin(messageBox)
+
+import alertMsg from './components/Message'
+Vue.prototype.$alertMsg = alertMsg
 /**
  * If you don't want to use mock-server
  * you want to use MockJs for mock api

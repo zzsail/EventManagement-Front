@@ -46,3 +46,19 @@ export function page(pageNum, pageSize, username) {
     params: { pageNum, pageSize, username }
   })
 }
+// 封解禁用户
+export function ban(userId) {
+  return request({
+    url: 'user/ban',
+    method: 'post',
+    params: { userId }
+  })
+}
+// 删除用户
+export function deleteUser(userId) {
+  return request({
+    url: 'user/delete',
+    method: 'post',
+    params: { userId }
+  })
+}

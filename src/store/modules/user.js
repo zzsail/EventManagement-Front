@@ -1,4 +1,4 @@
-import { login, logout, getInfo, register, improveInfo, page } from '@/api/user'
+import { login, logout, getInfo, register, improveInfo, page, ban, deleteUser } from '@/api/user'
 import { getToken, setToken, removeToken } from '@/utils/auth'
 import { resetRouter } from '@/router'
 
@@ -35,6 +35,16 @@ const mutations = {
 }
 
 const actions = {
+  // 删除用户
+  deleteUser({ commit }, userId) {
+    return new Promise((resolve, reject) => {
+      deleteUser(userId).then(() => {
+        resolve()
+      }).catch(error => {
+        reject(error)
+      })
+    })
+  },
   // user login
   login({ commit }, userInfo) {
     const { username, password } = userInfo
@@ -113,6 +123,16 @@ const actions = {
     return new Promise((resolve, reject) => {
       page(pageNum, pageSize, username).then(response => {
         resolve(response)
+      }).catch(error => {
+        reject(error)
+      })
+    })
+  },
+  // 封解禁用户
+  ban({ commit }, userId) {
+    return new Promise((resolve, reject) => {
+      ban(userId).then(() => {
+        resolve()
       }).catch(error => {
         reject(error)
       })
