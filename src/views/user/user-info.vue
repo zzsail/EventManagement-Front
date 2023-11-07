@@ -30,7 +30,7 @@
       </el-table-column>
       <el-table-column label="操作" align="center">
         <template slot-scope="{row,$index}">
-          <el-button type="primary" :loading="btnLoading" size="small">编辑</el-button>
+          <el-button type="primary" :loading="btnLoading" size="small" @click="handleUpdate(row)">编辑</el-button>
           <el-button v-if="row.ban" :loading="btnLoading" size="small" @click="handleBan(row, '封禁', )">封禁</el-button>
           <el-button v-if="!row.ban" :loading="btnLoading" type="success" size="small" @click="handleBan(row, '解禁')">解禁</el-button>
           <el-button type="danger" :loading="btnLoading" size="small" @click="handleDelete(row, $index)">删除</el-button>
@@ -38,6 +38,49 @@
       </el-table-column>
 
     </el-table>
+    <el-dialog :title="textMap[dialogStatus]" :visible="dialogFormVisible" width="600px">
+      <el-form ref="dataForm" :rules="rules" :model="temp" label-position="right" label-width="90px" style="width: 400px; margin-left:50px;">
+        <el-form-item label="用户名" prop="username">
+          <el-input v-model="temp.username" placeholder="请输入用户名"></el-input>
+        </el-form-item>
+        <el-form-item label="邮箱" prop="email">
+          <el-input v-model="temp.email" placeholder="请输入邮箱"></el-input>
+        </el-form-item>
+        <el-form-item label="密码" prop="password">
+          <el-input v-model="temp.password" placeholder="请输入密码" type="password"></el-input>
+        </el-form-item>
+        <el-row>
+          <el-col :span="12">
+            <el-form-item label="性别" prop="gender">
+              <el-select v-model="temp.gender" value-key="" placeholder="请选择性别">
+                <el-option value="男" />
+                <el-option value="女" />
+              </el-select>
+            </el-form-item>
+          </el-col>
+          <el-col :span="12">
+            <el-form-item label="年龄" prop="age">
+              <el-input v-model="temp.age" placeholder="请输入年龄" />
+            </el-form-item>
+          </el-col>
+        </el-row>
+        <el-row>
+          <el-col :span="12">
+            <el-form-item label="用户权限组" prop="power">
+              <el-select v-model="temp.power" placeholder="请选择用户权限组">
+                <el-option value="3" label="用户" />
+                <el-option value="2" label="管理员" />
+              </el-select>
+            </el-form-item>
+          </el-col>
+          <el-col :span="12">
+            <el-form-item label="状态" prop="ban">
+          
+            </el-form-item>
+          </el-col>
+        </el-row>
+      </el-form>
+    </el-dialog>
   </div>
 </template>
 
@@ -46,6 +89,22 @@ export default {
   data() {
     return {
       tableData: [],
+      temp: {
+        userId: '',
+        username: '',
+        email: '',
+        password: '',
+        gender: '',
+        age: 0,
+        power: 3,
+        ban: 1
+      },
+      dialogFormVisible: false,
+      dialogStatus: '',
+      textMap: {
+        update: '编辑用户',
+        create: '添加用户'
+      },
       tableLoading: false,
       listQuery: {
         pageNum: 1,
@@ -59,6 +118,36 @@ export default {
     this.getTableData()
   },
   methods: {
+    //
+    handleUpdate(row) {
+      this.temp = Object.assign({}, row) // 复制对象
+      this.dialogStatus = 'update'
+      this.dialogFormVisible = true
+      this.$nextTick(() => {
+        this.$refs['dataForm'].clearValidate()
+      })
+    },
+    // 添加用户
+    handleCreate(row) {
+      this.resetTemp()
+      this.dialogFormVisible = true
+      this.$nextTick(() => {
+        this.$refs['dataForm'].clearValidate()
+      })
+    },
+    // 重置temp数据
+    resetTemp() {
+      this.temp = {
+        userId: '',
+        username: '',
+        email: '',
+        password: '',
+        gender: '',
+        age: 0,
+        power: 3,
+        ban: 1
+      }
+    },
     // 删除用户
     handleDelete(row, index) {
       this.confirmMessageBox('确定删除该用户？', '删除').then(() => {
