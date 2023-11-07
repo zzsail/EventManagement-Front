@@ -147,11 +147,10 @@
 </template>
 
 <script>
-import { checkUsername } from '@/api/user'
 export default {
   name: 'Login',
   data() {
-    const validateUsername = (rule, value, callback) => {
+    const validateRegisterUsername = (rule, value, callback) => {
       if (!value) {
         callback(new Error('请输入用户名'))
       } else if (value.length < 3) {
@@ -170,6 +169,21 @@ export default {
             callback()
           }
         })
+      }
+    }
+    const validateUsername = (rule, value, callback) => {
+      if (!value) {
+        callback(new Error('请输入用户名'))
+      } else if (value.length < 3) {
+        callback(new Error('用户名长度至少为3位'))
+      } else if (value.length > 12) {
+        callback(new Error('用户名长度至多为12位'))
+      } else if (!/[^\d]/g.test(value)) {
+        callback(new Error('用户名不能为纯数字'))
+      } else if (!this.isUsername(value)) {
+        callback(new Error('用户名仅可包含中文、字母、数字以及下划线'))
+      } else {
+        callback()
       }
     }
     const validatePassword = (rule, value, callback) => {
@@ -245,7 +259,7 @@ export default {
         password: [{ required: true, trigger: 'blur', validator: validatePassword }]
       },
       registerRules: {
-        username: [{ required: true, trigger: 'blur', validator: validateUsername }],
+        username: [{ required: true, trigger: 'blur', validator: validateRegisterUsername }],
         email: [{ required: true, trigger: 'blur', validator: validateEmail }],
         password: [{ required: true, trigger: 'blur', validator: validatePassword }],
         pwdValidate: [{ required: true, trigger: 'blur', validator: validatePwdValidate }]
@@ -400,10 +414,7 @@ export default {
           this.$store.dispatch('user/login', this.loginForm).then(() => {
             this.$router.push({ path: this.redirect || '/' })
             this.loading = false
-            this.$message({
-              message: '登录成功',
-              type: 'success'
-            })
+            this.sideMessageBox('登录成功', '登录', 'success')
           }).catch(() => {
             this.loading = false
           })
