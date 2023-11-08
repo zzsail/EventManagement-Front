@@ -1,4 +1,4 @@
-import { login, logout, getInfo, register, improveInfo, page, ban, deleteUser, checkEmail, checkUsername } from '@/api/user'
+import { login, logout, getInfo, register, improveInfo, page, ban, deleteUser, checkEmail, checkUsername, update, create } from '@/api/user'
 import { getToken, setToken, removeToken } from '@/utils/auth'
 import { resetRouter } from '@/router'
 
@@ -122,7 +122,7 @@ const actions = {
     const { pageNum, pageSize, username } = pageInfo
     return new Promise((resolve, reject) => {
       page(pageNum, pageSize, username).then(response => {
-        resolve(response)
+        resolve(response.data)
       }).catch(error => {
         reject(error)
       })
@@ -131,8 +131,8 @@ const actions = {
   // 封解禁用户
   ban({ commit }, userId) {
     return new Promise((resolve, reject) => {
-      ban(userId).then(() => {
-        resolve()
+      ban(userId).then((response) => {
+        resolve(response.data.user)
       }).catch(error => {
         reject(error)
       })
@@ -153,6 +153,24 @@ const actions = {
     return new Promise((resovle, reject) => {
       checkEmail(email).then((response) => {
         resovle(response.data.isEmailValid)
+      }).catch(error => {
+        reject(error)
+      })
+    })
+  },
+  update({ commit }, userInfo) {
+    return new Promise((resovle, reject) => {
+      update(userInfo).then((response) => {
+        resovle(response.data.user)
+      }).catch(error => {
+        reject(error)
+      })
+    })
+  },
+  create({ commit }, userInfo) {
+    return new Promise((resovle, reject) => {
+      create(userInfo).then((response) => {
+        resovle(response.data.user)
       }).catch(error => {
         reject(error)
       })

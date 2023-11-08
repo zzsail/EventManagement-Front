@@ -174,8 +174,8 @@ export default {
     const validateUsername = (rule, value, callback) => {
       if (!value) {
         callback(new Error('请输入用户名'))
-      } else if (value.length < 3) {
-        callback(new Error('用户名长度至少为3位'))
+      } else if (value.length < 2) {
+        callback(new Error('用户名长度至少为2位'))
       } else if (value.length > 12) {
         callback(new Error('用户名长度至多为12位'))
       } else if (!/[^\d]/g.test(value)) {

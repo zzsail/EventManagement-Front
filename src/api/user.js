@@ -79,3 +79,17 @@ export function checkEmail(email) {
     params: { email }
   })
 }
+export function update(data) {
+  return request({
+    url: 'user/update',
+    method: 'put',
+    data
+  })
+}
+export function create(data) {
+  return request({
+    url: 'user/create',
+    method: 'post',
+    data
+  })
+}
