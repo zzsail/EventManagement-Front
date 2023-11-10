@@ -68,14 +68,14 @@ export const constantRoutes = [
       {
         path: 'info',
         name: 'Info',
-        component: () => import('@/views/event/info/index'),
+        component: () => import('@/views/event/info'),
         meta: { title: '赛事信息', icon: 'event-info' }
       },
       {
         path: 'tbale',
         name: 'Table',
-        component: () => import('@/views/event/table/index'),
-        meta: { title: '赛事管理', icon: 'event-menu' }
+        component: () => import('@/views/event/table'),
+        meta: { title: '赛事管理', icon: 'event-table' }
       }
     ]
   },
@@ -92,13 +92,13 @@ export const constantRoutes = [
       {
         path: 'info',
         name: 'Info',
-        component: () => import('@/views/user/user-info'),
-        meta: { title: '用户信息', icon: 'user-info' }
+        component: () => import('@/views/user/table'),
+        meta: { title: '用户信息', icon: 'user-table' }
       },
       {
         path: 'participant',
         name: 'Participant',
-        component: () => import('@/views/user/user-participant'),
+        component: () => import('@/views/user/participant'),
         meta: { title: '参赛者信息', icon: 'user-participant' }
       }
     ]
