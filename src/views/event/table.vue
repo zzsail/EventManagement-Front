@@ -11,7 +11,7 @@
       border
       style="width: 100%; margin-top: 10px"
     >
-      <el-table-column prop="eventName" label="赛事名" width="150" align="center" />
+      <el-table-column prop="eventName" label="赛事名" width="180" align="center" />
       <el-table-column prop="eventLocation" label="赛事地点" width="200" align="center" />
       <el-table-column prop="eventDate" label="赛事日期" width="200" align="center" />
       <el-table-column prop="eventDescription" label="赛事介绍" width="250" align="center" />

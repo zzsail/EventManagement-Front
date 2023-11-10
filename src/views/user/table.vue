@@ -22,8 +22,8 @@
           <el-tag v-if="scope.row.power === 3">用户</el-tag>
         </template>
       </el-table-column>
-      <el-table-column prop="lastUpdateTime" label="最后操作时间" width="270" align="center" />
-      <el-table-column prop="registerTime" label="注册时间" width="270" align="center" />
+      <el-table-column prop="lastUpdateTime" label="最后操作时间" align="center" />
+      <el-table-column prop="registerTime" label="注册时间" width="180" align="center" />
       <el-table-column prop="ban" label="状态" width="100" align="center">
         <template slot-scope="scope">
           <el-tag v-if="scope.row.ban" type="success" effect="dark">正常</el-tag>
