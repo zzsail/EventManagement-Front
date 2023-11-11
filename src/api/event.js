@@ -1,5 +1,18 @@
 import request from '@/utils/request'
 
+export function uploadImage(data) {
+  return new Promise((resolve, reject) => {
+    return request({
+      url: '/event/upload',
+      method: 'post',
+      data
+    }).then((response) => {
+      resolve(response.data.image)
+    }).catch(error => {
+      reject(error)
+    })
+  })
+}
 export function page(data) {
   const { pageNum, pageSize, eventName } = data
   return new Promise((resolve, reject) => {

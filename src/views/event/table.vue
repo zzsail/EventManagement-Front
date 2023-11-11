@@ -67,6 +67,18 @@
         <el-form-item label="赛事介绍" prop="eventDescription">
           <el-input v-model="temp.eventDescription" type="textarea" maxlength="500" placeholder="请输入赛事介绍" show-word-limit />
         </el-form-item>
+        <el-form-item label="赛事图片" prop="eventImage">
+          <el-upload
+            class="avatar-uploader"
+            action="''"
+            :show-file-list="false"
+            :before-upload="beforeUpload"
+            :on-change=" uploadImage"
+          >
+            <img v-if="imageUrl" :src="imageUrl" class="avatar">
+            <i v-else class="el-icon-plus avatar-uploader-icon" />
+          </el-upload>
+        </el-form-item>
       </el-form>
       <div slot="footer" class="dialog-footer">
         <el-button @click="dialogFormVisible = false">
@@ -100,7 +112,7 @@
 
 <script>
 import { createCategory, listCategory } from '@/api/eventCategory'
-import { create, page, update } from '@/api/event'
+import { create, page, update, uploadImage } from '@/api/event'
 export default {
   data() {
     const validateUsername = (rule, value, callback) => {
@@ -199,12 +211,14 @@ export default {
       },
       tableData: [],
       categoryOptions: [],
+      imageUrl: '',
       temp: {
         eventId: '',
         eventName: '',
         eventDate: '',
         eventLocation: '',
         eventDescription: '',
+        eventImage: '',
         categoryName: '',
         ratingValue: '', // 评分
         participantNum: '', // 参赛人数
@@ -246,6 +260,41 @@ export default {
   },
 
   methods: {
+    // 上传文件函数
+    // handleRemove(file, fileList) {
+    //   console.log(file, fileList)
+    // },
+    // handlePreview(file) {
+    //   console.log(file)
+    // },
+    uploadImage(file) {
+      if (file.status !== 'ready') return
+      const formData = new FormData()
+      formData.append('file', file.raw) // 传给后台接收的名字 file
+      uploadImage(formData).then(response => {
+        console.log(response)
+        this.temp.eventImage = response
+        this.imageUrl = URL.createObjectURL(file.raw)
+      })
+    },
+    // 上传前处理
+    beforeUpload(file) {
+      const fileSize = file.size
+      const FIVE_M = 10 * 1024 * 1024
+      // 大于5M，不允许上传
+      if (fileSize > FIVE_M) {
+        this.$message.error('最大上传10M')
+        return false
+      }
+      // 判断文件类型
+      const fileName = file.name
+      const reg = /(.*).(jpg|jpeg|png)$/
+      if (!reg.test(fileName)) {
+        this.$message.error('只能上传jpg/png!')
+        return false
+      }
+      return true
+    },
     // 获取分类列表
     getCategoryList() {
       listCategory().then(response => {
@@ -429,4 +478,27 @@ export default {
   float: right;
   margin-bottom: 10px;
 }
+.avatar-uploader .el-upload {
+    border: 1px dashed #d9d9d9;
+    border-radius: 6px;
+    cursor: pointer;
+    position: relative;
+    overflow: hidden;
+  }
+  .avatar-uploader .el-upload:hover {
+    border-color: #409EFF;
+  }
+  .avatar-uploader-icon {
+    font-size: 28px;
+    color: #8c939d;
+    width: 178px;
+    height: 178px;
+    line-height: 178px;
+    text-align: center;
+  }
+  .avatar {
+    width: 178px;
+    height: 178px;
+    display: block;
+  }
 </style>
