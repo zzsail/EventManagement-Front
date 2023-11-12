@@ -69,14 +69,18 @@
         </el-form-item>
         <el-form-item label="赛事图片" prop="eventImage">
           <el-upload
-            class="avatar-uploader"
+            ref="upload"
+            class="picture-uploader"
             action="''"
             :show-file-list="false"
             :before-upload="beforeUpload"
             :on-change=" uploadImage"
+            :file-list="fileList"
+            :limit="1"
           >
-            <img v-if="imageUrl" :src="imageUrl" class="avatar">
-            <i v-else class="el-icon-plus avatar-uploader-icon" />
+            <el-image v-if="imageUrl" :src="require('../../assets/' + imageUrl)" class="picture" />
+            <!-- <el-image v-if="imageUrl" :src="imageUrl" class="picture" /> -->
+            <i v-else class="el-icon-plus picture-uploader-icon" />
           </el-upload>
         </el-form-item>
       </el-form>
@@ -211,7 +215,9 @@ export default {
       },
       tableData: [],
       categoryOptions: [],
+      baseUrl: 'C:/Code/Vue/EventManagement-Front/src/assets/',
       imageUrl: '',
+      fileList: [],
       temp: {
         eventId: '',
         eventName: '',
@@ -229,9 +235,6 @@ export default {
         categoryName: '',
         categoryDescription: ''
       },
-      originalName: '',
-      originalPwd: '',
-      originalEmail: '',
       dialogFormVisible: false,
       categoryDialogFormVisible: false,
       dialogStatus: '',
@@ -260,21 +263,14 @@ export default {
   },
 
   methods: {
-    // 上传文件函数
-    // handleRemove(file, fileList) {
-    //   console.log(file, fileList)
-    // },
-    // handlePreview(file) {
-    //   console.log(file)
-    // },
     uploadImage(file) {
       if (file.status !== 'ready') return
       const formData = new FormData()
       formData.append('file', file.raw) // 传给后台接收的名字 file
       uploadImage(formData).then(response => {
-        console.log(response)
         this.temp.eventImage = response
-        this.imageUrl = URL.createObjectURL(file.raw)
+        this.imageUrl = response
+        console.log(this.imageUrl)
       })
     },
     // 上传前处理
@@ -376,7 +372,15 @@ export default {
     // 编辑 数据回显
     handleUpdate(row) {
       this.changeBtnLoading(true)
+      this.resetTemp()
       this.temp = Object.assign({}, row) // 复制对象
+      // const url = this.baseUrl + this.temp.eventImage
+      // const url = '../../assets/' + this.temp.eventImage
+      this.imageUrl = this.temp.eventImage
+      // console.log(url)
+      // this.fileList.push({
+      //   'url': url
+      // })
       this.dialogStatus = 'update'
       this.dialogFormVisible = true
       this.$nextTick(() => {
@@ -457,6 +461,8 @@ export default {
         participantNum: '',
         status: ''
       }
+      this.fileList = []
+      this.imageUrl = ''
     },
     resetCategoryTemp() {
       this.categoryTemp = {
@@ -478,27 +484,27 @@ export default {
   float: right;
   margin-bottom: 10px;
 }
-.avatar-uploader .el-upload {
+.picture-uploader .el-upload {
     border: 1px dashed #d9d9d9;
     border-radius: 6px;
     cursor: pointer;
     position: relative;
     overflow: hidden;
   }
-  .avatar-uploader .el-upload:hover {
+  .picture-uploader .el-upload:hover {
     border-color: #409EFF;
   }
-  .avatar-uploader-icon {
+  .picture-uploader-icon {
     font-size: 28px;
     color: #8c939d;
-    width: 178px;
-    height: 178px;
-    line-height: 178px;
+    width: 100px;
+    height: 100px;
+    line-height: 100px;
     text-align: center;
   }
-  .avatar {
-    width: 178px;
-    height: 178px;
+  .picture {
+    width: 100px;
+    height: 100px;
     display: block;
   }
 </style>

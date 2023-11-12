@@ -21,7 +21,7 @@ export default {
         eventDate: '',
         eventLocation: '',
         eventDescription: '',
-        eventImg: '',
+        eventImage: '',
         categoryName: '',
         ratingValue: '', // 评分
         participantNum: '', // 参赛人数
