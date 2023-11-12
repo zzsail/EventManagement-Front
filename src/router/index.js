@@ -69,10 +69,19 @@ export const constantRoutes = [
         path: 'info',
         name: 'Info',
         component: () => import('@/views/event/info'),
-        meta: { title: '赛事信息', icon: 'event-info' }
+        meta: { title: '赛事信息', icon: 'event-info' },
+        children: [
+          {
+            path: ':id', // 使用动态路由参数，例如 '/event/info/1'
+            name: 'EventInfoDetail',
+            hidden: true,
+            component: () => import('@/views/event/info/EventInfoDetail'),
+            meta: { title: '赛事详情' }
+          }
+        ]
       },
       {
-        path: 'tbale',
+        path: 'table',
         name: 'Table',
         component: () => import('@/views/event/table'),
         meta: { title: '赛事管理', icon: 'event-table' }

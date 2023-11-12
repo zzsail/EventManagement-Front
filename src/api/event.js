@@ -1,5 +1,26 @@
 import request from '@/utils/request'
 
+export function load(pageNum, pageSize) {
+  return request({
+    url: 'event/load',
+    method: 'get',
+    params: { pageNum, pageSize }
+  })
+}
+
+export function deleteEvent(eventId) {
+  return new Promise((resolve, reject) => {
+    return request({
+      url: '/event/delete',
+      method: 'post',
+      params: { eventId }
+    }).then(() => {
+      resolve()
+    }).catch(error => {
+      reject(error)
+    })
+  })
+}
 export function uploadImage(data) {
   return new Promise((resolve, reject) => {
     return request({

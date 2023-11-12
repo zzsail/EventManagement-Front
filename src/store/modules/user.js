@@ -29,8 +29,8 @@ const mutations = {
     state.avatar = avatar
   },
   // 设置权限
-  SET_POWER: (state, power) => {
-    state.power = power
+  SET_ROLE: (state, role) => {
+    state.role = role
   }
 }
 
@@ -70,11 +70,11 @@ const actions = {
           return reject('Verification failed, please Login again.')
         }
 
-        const { name, avatar, power } = data
+        const { name, avatar, role } = data
 
         commit('SET_NAME', name)
         commit('SET_AVATAR', avatar)
-        commit('SET_POWER', power)
+        commit('SET_ROLE', role)
         resolve(data)
       }).catch(error => {
         reject(error)

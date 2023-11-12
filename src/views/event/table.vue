@@ -24,11 +24,9 @@
           <el-tag v-if="!scope.row.status" type="danger" effect="dark">已结束</el-tag>
         </template>
       </el-table-column>
-      <el-table-column label="操作" width="250" fixed="right" align="center">
+      <el-table-column label="操作" width="200" fixed="right" align="center">
         <template slot-scope="{row,$index}">
           <el-button type="primary" :loading="btnLoading" size="small" @click="handleUpdate(row)">编辑</el-button>
-          <el-button v-if="row.status" :loading="btnLoading" size="small" @click="handleBan(row, '终止', $index)">终止</el-button>
-          <el-button v-if="!row.status" :loading="btnLoading" type="success" size="small" @click="handleBan(row, '重启', $index)">重启</el-button>
           <el-button type="danger" :loading="btnLoading" size="small" @click="handleDelete(row, $index)">删除</el-button>
         </template>
       </el-table-column>
@@ -37,7 +35,7 @@
     <el-pagination
       :total="total"
       :current-page="tableQuery.pageNum"
-      :page-sizes="[5, 10, 20, 50]"
+      :page-sizes="[10, 20, 50]"
       :page-size="tableQuery.pageSize"
       layout="total, sizes, prev, pager, next, jumper"
       align="center"
@@ -116,7 +114,7 @@
 
 <script>
 import { createCategory, listCategory } from '@/api/eventCategory'
-import { create, page, update, uploadImage } from '@/api/event'
+import { create, page, update, uploadImage, deleteEvent } from '@/api/event'
 export default {
   data() {
     const validateUsername = (rule, value, callback) => {
@@ -251,7 +249,7 @@ export default {
       total: 0,
       tableQuery: {
         pageNum: 1,
-        pageSize: 5,
+        pageSize: 10,
         eventName: ''
       },
       btnLoading: false
@@ -412,11 +410,11 @@ export default {
     },
     // 删除用户
     handleDelete(row, index) {
-      this.confirmMessageBox('确定删除该用户？', '删除').then(() => {
+      this.confirmMessageBox('确定删除该赛事？', '删除赛事').then(() => {
         this.changeBtnLoading(true)
-        this.$store.dispatch('user/deleteUser', row.userId).then(() => {
+        deleteEvent(row.eventId).then(() => {
           this.changeBtnLoading(false)
-          this.sideMessageBox('删除用户' + row.username, '删除成功', 'success')
+          this.sideMessageBox('删除赛事' + row.eventName, '删除成功', 'success')
           this.tableData.splice(index, 1)
           this.total -= 1
         }).catch(() => {
