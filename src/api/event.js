@@ -1,5 +1,10 @@
 import request from '@/utils/request'
-
+export function infoById(id) {
+  return request({
+    url: 'event/info/' + id,
+    method: 'get'
+  })
+}
 export function load(pageNum, pageSize) {
   return request({
     url: 'event/load',

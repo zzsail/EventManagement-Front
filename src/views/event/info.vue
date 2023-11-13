@@ -1,10 +1,12 @@
 <template>
   <div v-infinite-scroll="load" class="mainContainer" infinite-scroll-distance="1" style="overflow:auto; height: 700px;">
-    <el-card v-for="(event, index) in infoData" :key="index" shadow="hover" class="card" :cover="true">
-      <el-image class="img" :src="require('../../assets/' + event.eventImage)" />
-      <div class="textContainer">{{ event.eventDescription }}</div>
-      <div class="eventNameContainer">{{ event.eventName }}</div>
-    </el-card>
+    <router-link v-for="(event, index) in infoData" :key="index" class="card" :to="'/event/info/' + event.eventId">
+      <el-card shadow="hover" :cover="true" @click.native="showOverlay">
+        <el-image class="img" :src="require('../../assets/' + event.eventImage)" />
+        <div class="textContainer">{{ event.eventDescription }}</div>
+        <div class="eventNameContainer">{{ event.eventName }}</div>
+      </el-card>
+    </router-link>
   </div>
 </template>
 
@@ -19,6 +21,7 @@ export default {
       infoData: [],
       loading: false,
       hasMoreData: true,
+      dialogVisible: false,
       temp: {
         eventId: '',
         eventName: '',
@@ -30,8 +33,7 @@ export default {
         ratingValue: '', // 评分
         participantNum: '', // 参赛人数
         status: ''
-      },
-      showOverlayIndex: null
+      }
     }
   },
   methods: {

@@ -42,6 +42,13 @@ export const constantRoutes = [
     component: () => import('@/views/404'),
     hidden: true
   },
+  {
+    path: '/event/info/:id', // 使用动态路由参数，例如 '/event/info/1'
+    name: 'Detail',
+    hidden: true,
+    component: () => import('@/views/event/detail'),
+    meta: { title: '赛事详情' }
+  },
 
   {
     path: '/',
@@ -69,16 +76,7 @@ export const constantRoutes = [
         path: 'info',
         name: 'Info',
         component: () => import('@/views/event/info'),
-        meta: { title: '赛事信息', icon: 'event-info' },
-        children: [
-          {
-            path: ':id', // 使用动态路由参数，例如 '/event/info/1'
-            name: 'EventInfoDetail',
-            hidden: true,
-            component: () => import('@/views/event/info/EventInfoDetail'),
-            meta: { title: '赛事详情' }
-          }
-        ]
+        meta: { title: '赛事信息', icon: 'event-info' }
       },
       {
         path: 'table',
@@ -102,13 +100,36 @@ export const constantRoutes = [
         path: 'info',
         name: 'Info',
         component: () => import('@/views/user/table'),
-        meta: { title: '用户信息', icon: 'user-table' }
+        meta: { title: '用户管理', icon: 'user-table' }
       },
       {
         path: 'participant',
         name: 'Participant',
         component: () => import('@/views/user/participant'),
-        meta: { title: '参赛者信息', icon: 'user-participant' }
+        meta: { title: '参赛者管理', icon: 'user-participant' }
+      }
+    ]
+  },
+  {
+    path: '/award',
+    component: Layout,
+    redirect: '/award/table',
+    name: 'Award',
+    meta: {
+      title: '奖项',
+      icon: 'award-table' },
+    children: [
+      {
+        path: 'table',
+        name: 'Table',
+        component: () => import('@/views/award/table'),
+        meta: { title: '奖项管理', icon: 'award-table' }
+      },
+      {
+        path: 'table',
+        name: 'Table',
+        component: () => import('@/views/award/table'),
+        meta: { title: '奖项管理', icon: 'award-table' }
       }
     ]
   },
@@ -197,6 +218,7 @@ export const constantRoutes = [
 
   // 404 page must be placed at the end !!!
   { path: '*', redirect: '/404', hidden: true }
+
 ]
 
 const createRouter = () => new Router({
