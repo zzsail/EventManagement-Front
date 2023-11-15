@@ -1,9 +1,9 @@
 <template>
   <div class="app-container">
     <div class="filter-container">
-      <el-input v-model="tableQuery.participantName" placeholder="搜索用户名" maxlength="12" style="width: 200px; margin-right: 5px;" />
+      <el-input v-model="tableQuery.participantName" placeholder="搜索参赛者姓名" maxlength="12" style="width: 200px; margin-right: 5px;" />
       <el-button type="primary" icon="el-icon-search" size="medium" @click="handleFilter">搜索</el-button>
-      <el-button type="success" icon="el-icon-plus" size="medium" @click="handleCreate">添加用户</el-button>
+      <el-button type="success" icon="el-icon-plus" size="medium" @click="handleCreate">添加参赛者</el-button>
     </div>
     <el-table
       v-loading="tableLoading"
@@ -80,7 +80,7 @@
 </template>
 
 <script>
-import { page, update, create, delelteParticipant } from '@/api/participant'
+import { page, update, create, deleteParticipant } from '@/api/participant'
 export default {
 
   data() {
@@ -284,7 +284,7 @@ export default {
     handleDelete(row, index) {
       this.confirmMessageBox('确定删除该参赛者？', '删除').then(() => {
         this.changeBtnLoading(true)
-        delelteParticipant(row.participantId).then(() => {
+        deleteParticipant(row.participantId).then(() => {
           this.changeBtnLoading(false)
           this.sideMessageBox('删除参赛者' + row.participantName, '删除成功', 'success')
           this.tableData.splice(index, 1)

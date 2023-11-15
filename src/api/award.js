@@ -1,27 +1,27 @@
 import request from '@/utils/request'
 
 // 删除
-export function deleteParticipant(participantId) {
+export function deleteAward(awardId) {
   return request({
-    url: 'participant/delete',
+    url: 'award/delete',
     method: 'post',
-    params: { participantId }
+    params: { awardId }
   })
 }
 // 分页查询
 export function page(tableQuery) {
-  const { pageNum, pageSize, participantName } = tableQuery
+  const { pageNum, pageSize, awardName } = tableQuery
   return request({
-    url: 'participant/page',
+    url: 'award/page',
     method: 'get',
-    params: { pageNum, pageSize, participantName }
+    params: { pageNum, pageSize, awardName }
   })
 }
 
 // 更新
 export function update(data) {
   return request({
-    url: 'participant/update',
+    url: 'award/update',
     method: 'put',
     data
   })
@@ -30,7 +30,7 @@ export function update(data) {
 // 添加
 export function create(data) {
   return request({
-    url: 'participant/create',
+    url: 'award/create',
     method: 'post',
     data
   })

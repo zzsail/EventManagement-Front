@@ -54,12 +54,14 @@ export const constantRoutes = [
     path: '/',
     component: Layout,
     redirect: '/home',
-    children: [{
-      path: 'home',
-      name: 'Home',
-      component: () => import('@/views/home/index'),
-      meta: { title: '主页', icon: 'home' }
-    }]
+    children: [
+      {
+        path: 'home',
+        name: 'Home',
+        component: () => import('@/views/home/index'),
+        meta: { title: '主页', icon: 'home' }
+      }
+    ]
   },
 
   {
@@ -76,13 +78,13 @@ export const constantRoutes = [
         path: 'info',
         name: 'Info',
         component: () => import('@/views/event/info'),
-        meta: { title: '赛事信息', icon: 'event-info' }
+        meta: { title: '赛事信息' }
       },
       {
         path: 'table',
         name: 'Table',
         component: () => import('@/views/event/table'),
-        meta: { title: '赛事管理', icon: 'event-table' }
+        meta: { title: '赛事管理' }
       }
     ]
   },
@@ -100,13 +102,13 @@ export const constantRoutes = [
         path: 'info',
         name: 'Info',
         component: () => import('@/views/user/table'),
-        meta: { title: '用户管理', icon: 'user-table' }
+        meta: { title: '用户管理' }
       },
       {
         path: 'participant',
         name: 'Participant',
         component: () => import('@/views/user/participant'),
-        meta: { title: '参赛者管理', icon: 'user-participant' }
+        meta: { title: '参赛者管理' }
       }
     ]
   },
@@ -117,101 +119,20 @@ export const constantRoutes = [
     name: 'Award',
     meta: {
       title: '奖项',
-      icon: 'award-table' },
-    children: [
-      {
-        path: 'table',
-        name: 'Table',
-        component: () => import('@/views/award/table'),
-        meta: { title: '奖项管理', icon: 'award-table' }
-      },
-      {
-        path: 'table',
-        name: 'Table',
-        component: () => import('@/views/award/table'),
-        meta: { title: '奖项管理', icon: 'award-table' }
-      }
-    ]
-  },
-  {
-    path: '/form',
-    component: Layout,
-    children: [
-      {
-        path: 'index',
-        name: 'Form',
-        component: () => import('@/views/form/index'),
-        meta: { title: 'Form', icon: 'form' }
-      }
-    ]
-  },
-
-  {
-    path: '/nested',
-    component: Layout,
-    redirect: '/nested/menu1',
-    name: 'Nested',
-    meta: {
-      title: 'Nested',
-      icon: 'nested'
+      icon: 'award-table'
     },
     children: [
       {
-        path: 'menu1',
-        component: () => import('@/views/nested/menu1/index'), // Parent router-view
-        name: 'Menu1',
-        meta: { title: 'Menu1' },
-        children: [
-          {
-            path: 'menu1-1',
-            component: () => import('@/views/nested/menu1/menu1-1'),
-            name: 'Menu1-1',
-            meta: { title: 'Menu1-1' }
-          },
-          {
-            path: 'menu1-2',
-            component: () => import('@/views/nested/menu1/menu1-2'),
-            name: 'Menu1-2',
-            meta: { title: 'Menu1-2' },
-            children: [
-              {
-                path: 'menu1-2-1',
-                component: () => import('@/views/nested/menu1/menu1-2/menu1-2-1'),
-                name: 'Menu1-2-1',
-                meta: { title: 'Menu1-2-1' }
-              },
-              {
-                path: 'menu1-2-2',
-                component: () => import('@/views/nested/menu1/menu1-2/menu1-2-2'),
-                name: 'Menu1-2-2',
-                meta: { title: 'Menu1-2-2' }
-              }
-            ]
-          },
-          {
-            path: 'menu1-3',
-            component: () => import('@/views/nested/menu1/menu1-3'),
-            name: 'Menu1-3',
-            meta: { title: 'Menu1-3' }
-          }
-        ]
+        path: 'table',
+        name: 'Table',
+        component: () => import('@/views/award/table'),
+        meta: { title: '奖项管理' }
       },
       {
-        path: 'menu2',
-        component: () => import('@/views/nested/menu2/index'),
-        name: 'Menu2',
-        meta: { title: 'menu2' }
-      }
-    ]
-  },
-
-  {
-    path: 'external-link',
-    component: Layout,
-    children: [
-      {
-        path: 'https://panjiachen.github.io/vue-element-admin-site/#/',
-        meta: { title: 'External Link', icon: 'link' }
+        path: 'winner',
+        name: 'Winner',
+        component: () => import('@/views/award/winner'),
+        meta: { title: '获奖者信息' }
       }
     ]
   },
