@@ -8,7 +8,7 @@
       <div class="right-menu">
         <el-dropdown class="avatar-container" trigger="hover">
           <div class="avatar-wrapper">
-            <img :src="avatar+'?imageView2/1/w/80/h/80'" class="user-avatar">
+            <el-image src="require('C:/Code/Vue/EventManagement-Front/src/assets/test.jpg')" class="user-avatar" />
             <i class="el-icon-caret-bottom" />
           </div>
           <el-dropdown-menu slot="dropdown" class="user-dropdown">

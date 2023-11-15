@@ -35,3 +35,11 @@ export function create(data) {
     data
   })
 }
+
+// 查询数量
+export function getParticipantNum() {
+  return request({
+    url: 'participant/num',
+    method: 'get'
+  })
+}

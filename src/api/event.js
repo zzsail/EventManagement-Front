@@ -79,3 +79,9 @@ export function create(data) {
     })
   })
 }
+export function getEventNum() {
+  return request({
+    url: '/event/num',
+    method: 'get'
+  })
+}
